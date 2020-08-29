@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load markdown_tags %}
+
+{% block content %}
+    {% include 'partials/navbar.html' %}
+
+    <div class="container">
+        <h1> {{ file.name }} </h1>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                {% if file.latestVersion.document.url %}
+                    <a href="{{file.latestVersion.document.url}}" target="_blank">
+                        Download
+                    </a>
+                {% endif %}
+
+                {% if file.latestVersion.document.markdown %}
+                    <h3>Content</h3>
+                    <div>
+                        {{file.latestVersion.document.markdown | markdown}}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-6">
+                <h4> File Version </h4>
+                <ul>
+                {% for version in file.fileversion_set.all %}
+                    <li> {{version.pk}} </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
