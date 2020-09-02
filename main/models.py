@@ -28,12 +28,9 @@ class File(models.Model):
         return self.name
 
 class Document(models.Model):
-    url = models.URLField(blank = True, default = '')
+    url = models.FileField()
     markdown = models.TextField(blank = True, default = '')
     docType = models.CharField(max_length = 256)
-
-    def __str__(self):
-        return self.url
 
 class FileVersion(models.Model):
     file = models.ForeignKey('File', on_delete = models.CASCADE)

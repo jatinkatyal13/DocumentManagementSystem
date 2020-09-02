@@ -5,8 +5,11 @@ from main import views
 
 urlpatterns = [
     path('', login_required(views.MyFilesListView.as_view())),
+
     path('file/<int:pk>', login_required(views.FileDetailView.as_view())),
     path('file/<int:pk>/edit', login_required(views.FileUpdateView.as_view())),
-    path('file/new', login_required(views.FileCreateView.as_view()))
+    path('file/new', login_required(views.FileCreateView.as_view())),
+
+    #path('group/', login_required())
 ]
 

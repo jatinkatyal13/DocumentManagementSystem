@@ -7,6 +7,7 @@
 
     <div class="container">
         <h1> {{ file.name }} </h1>
+        <a href="/file/{{file.pk}}/edit">Edit</a>
         <div class="row">
             <div class="col-12 col-md-6">
                 {% if file.latestVersion.document.url %}

@@ -2,7 +2,7 @@ from django import forms
 from main import models
 
 class FileForm(forms.ModelForm):
-    url = forms.CharField(required=False)
+    url = forms.FileField(required=False)
     markdown = forms.CharField(required=False)
     docType = forms.CharField(required=True)
    
