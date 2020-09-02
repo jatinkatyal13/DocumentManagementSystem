@@ -1,0 +1,130 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMS_Login</title>
+    <style>
+        input[type=text],input[type=password],
+      select {
+          width: 100%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          display: block;
+          border: 3px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+          height: 50px;
+      }
+      input[type=submit] {
+        width: 30%;
+        text-align: center;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    input[type=text]:focus{
+        border: 2px solid black;
+    }
+    input[type=password]:focus{
+        border: 2px solid black;
+    }
+    .caption
+    {
+        display: block;
+    }
+    .form-container
+    {
+        background:#fff;
+        padding: 30px;
+        margin-top:30px;
+        margin-right: 300px;
+        margin-left: 300px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px #000;
+    }
+    </style>
+</head>
+<body>
+    <script src="{% static '/js/jquery-3.4.1.min.js' %}" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="{% static '/js/popper.min.js' %}"></script>
+    <script src="{% static '/js/Chart.min.js' %}"></script>
+    <script src="{% static '/js/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min.js' %}" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}"/>
+    <form action="vendor_login" onsubmit="return checkform()" method="POST" class="form-container">
+        {%csrf_token%}
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark justify-content-center">
+            <ul class="navbar-nav">
+                <li class="nav-item ">
+                    <a href="DMS_Login" class="nav-link text-white font-weight-bold"><h3>Employee</h3></a>
+                </li>
+            </ul>
+            &nbsp;&nbsp;&nbsp;
+        </nav>
+        <div class="container">
+            <br>
+            <h2 class="text-center"><b> Login Form</b></h2>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-8 " style="color: red;">
+                    (Fields with * should not be left blank)
+                </div> 
+            </div>
+                <div class="row">
+                <div class="col text-center "style="color: red;" >
+                    {% for msg in messages%}
+                    <h5>{{msg}}</h5>
+                    {%endfor%}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-3"><label for="email" style="font-size:x-large;">Email *:</label></div>
+                <div class="col-md-4"><input type="text" class="form-control" id="email" name="email"  style="box-shadow:none; font-size:12px;"placeholder="name@example.com" >
+                    <span class="caption"><label id="lbltxt3" style="visibility: hidden; color:red"></label></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-3"><label for="tan" style="font-size:x-large;" >Password *:</label></div>
+                <div class="col-md-4"><input type="password" class="form-control" id="pwd" name="pwd" maxlength="15" onchange="validatepwd(this)" style="box-shadow:none; font-size:12px;" onkeypress="isAlphaNumeric(event);">
+                <span class="caption"><label id="lbltxt6" style="visibility: hidden; color:red"></label></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-7"><a href="vendor_registration">if not a registered  then click here</a></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-5"></div>
+                <div class="col"><input type="Submit" id="sub" name="sub" value="SUBMIT" class="btn btn-success"></div>
+            </div>
+            <br>
+        </div>
+    </form>
+</body>
+</html>
+<script>
+    function checkform()
+    {
+        if(document.getElementById("email").value.length==0) 
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        else if(document.getElementById("pwd").value.length==0)
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        return true;
+    }
+</script>

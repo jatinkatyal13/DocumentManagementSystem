@@ -57,7 +57,11 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+<<<<<<< HEAD
             BASE_DIR / 'Templates'
+=======
+            os.path.join(BASE_DIR, 'Templates')
+>>>>>>> c25d9011e36ae295518d07f06e2bc8399a216be6
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -80,7 +84,7 @@ WSGI_APPLICATION = 'DocMS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

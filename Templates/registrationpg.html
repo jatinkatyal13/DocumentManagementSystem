@@ -1,0 +1,261 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMS_registration</title>
+    <style>
+        input[type=text],input[type=password],
+      select {
+          width: 100%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          display: block;
+          border: 3px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+          height: 50px;
+      }
+      input[type=submit] {
+        width: 30%;
+        text-align: center;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    input[type=text]:focus{
+        border: 2px solid black;
+    }
+    input[type=password]:focus{
+        border: 2px solid black;
+    }
+    .caption
+    {
+        display: block;
+    }
+    </style>
+</head>
+<body>
+    <script src="{% static '/js/jquery-3.4.1.min.js' %}" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="{% static '/js/popper.min.js' %}"></script>
+    <script src="{% static '/js/Chart.min.js' %}"></script>
+    <script src="{% static '/js/jquery-3.3.1.slim.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min.js' %}" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}"/>
+    <form action="vendor_registration" onsubmit="return checkform()" method="POST">
+        {%csrf_token%}
+        <div class="container">
+            <br>
+            <h2 class="text-center"><b>DMS Registration Form</b></h2>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-md-8 text-center " style="color: red;">
+                    (Fields with * should not be left blank)
+                </div> 
+            </div>
+                <div class="row">
+                <div class="col text-center "style="color: red;" >
+                    {% for msg in messages%}
+                    <h5>{{msg}}</h5>
+                    {%endfor%}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 text-center"><label for="s_name"style="font-size:x-large;" >Name *:</label></div>
+                <div class="col-md-4"><input type="text" class="form-control" id="s_name" name="s_name" maxlength="35" style="box-shadow:none; font-size:12px;" >
+                <span class="caption"><label></label></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 text-center"><label for="email" style="font-size:x-large;">Email *:</label></div>
+                <div class="col-md-4"><input type="text" class="form-control" id="email" name="email"  style="box-shadow:none; font-size:12px;"placeholder="name@example.com" >
+                    <span class="caption"><label id="lbltxt3" style="visibility: hidden; color:red"></label></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5 text-center"><label for="mob_no" style="font-size:x-large;" >Phone Number *:</label></div>
+                <div class="col-md-4"><input type="text" class="form-control" id="mob_no" name="mob_no" maxlength="10" style="box-shadow:none; font-size:12px;" onkeypress="isInputNumber(event);">
+                    <span class="caption"><label id="lbltxt4" style="visibility: hidden; color:red"></label></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5 text-center"><label for="tan" style="font-size:x-large;" >TAN Number *:</label></div>
+                <div class="col-md-4"><input type="text" class="form-control" id="tan" name="tan" maxlength="10" style="box-shadow:none; font-size:12px;" onkeypress="isAlphaNumeric(event);">
+                <span class="caption"><label>Example: ABCD12345E</label>&nbsp; &nbsp;<label id="lbltxt5" style="visibility: hidden; color:red"></label></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5 text-center"><label for="tan" style="font-size:x-large;" >Password *:</label></div>
+                <div class="col-md-4"><input type="password" class="form-control" id="pwd" name="pwd" maxlength="15" onchange="validatepwd(this)" style="box-shadow:none; font-size:12px;" onkeypress="isAlphaNumeric(event);">
+                <span class="caption"><label id="lbltxt6" style="visibility: hidden; color:red"></label></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5 text-center"><label for="confirm_pwd" style="font-size:x-large;" >Confirm Password *:</label></div>
+                <div class="col-md-4"><input type="password" class="form-control" id="confirm_pwd" name="confirm_pwd" maxlength="15" style="box-shadow:none; font-size:12px;" onkeypress="isAlphaNumeric(event);">
+                <span class="caption"><label id="lbltxt7" style="visibility: hidden; color:red"></label></span></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-5"></div>
+                <div class="col"><input type="Submit" id="sub" name="sub" value="SUBMIT" class="btn btn-success"></div>
+            </div>
+            <br>
+        </div>
+    </form>
+</body>
+</html>
+<script>
+    document.getElementById("email").addEventListener("change",function()
+    {
+        var regx=/^([a-zA-Z0-9\.-]+)@([a-zA-Z0-9-]+)\.([a-z]{2,20})(.[a-z]{2,20})*$/;
+        var txt2=document.getElementById("email").value;
+        if(!regx.test(txt2))
+        {
+            document.getElementById("email").style.border="3px solid red";
+            document.getElementById("email").focus();
+            $("#lbltxt3").html("Invalid email")
+            document.getElementById("lbltxt3").style.visibility="visible";
+        }
+        else{
+            document.getElementById("email").style.border="1px solid black";
+            document.getElementById("lbltxt3").style.visibility="hidden";
+        }
+    });
+    document.getElementById("mob_no").addEventListener("change",function()
+    {
+        var regx=/^[1-9][0-9]{9}$/;
+        var txt2=document.getElementById("mob_no").value;
+        if(!regx.test(txt2))
+        {
+            document.getElementById("mob_no").style.border="3px solid red";
+            document.getElementById("mob_no").focus();
+            $("#lbltxt4").html("length should be exactly 10")
+            document.getElementById("lbltxt4").style.visibility="visible";
+        }
+        else{
+            document.getElementById("mob_no").style.border="1px solid black";
+            document.getElementById("lbltxt4").style.visibility="hidden";
+        }
+    });
+    document.getElementById("tan").addEventListener("change",function()
+    {
+        var regx=/^[A-Z a-z]{4}[0-9]{5}[A-Z a-z]$/;
+        var txt2=document.getElementById("tan").value;
+        if(!regx.test(txt2))
+        {
+            document.getElementById("tan").style.border="3px solid red";
+            document.getElementById("tan").focus();
+            $("#lbltxt5").html("Follow the format")
+            document.getElementById("lbltxt5").style.visibility="visible";
+        }
+        else{
+            document.getElementById("tan").style.border="1px solid black";
+            document.getElementById("lbltxt5").style.visibility="hidden";
+        }
+    });
+    function validatepwd(event)
+    {
+        if(event.value.length<8)
+        {
+            document.getElementById("pwd").style.border="3px solid red";
+            document.getElementById("pwd").focus();
+            $("#lbltxt6").html("minimum length should be 8")
+            document.getElementById("lbltxt6").style.visibility="visible";
+        }
+        else
+        {
+            document.getElementById("pwd").style.border="1px solid black";
+            document.getElementById("lbltxt6").style.visibility="hidden";
+        }
+    }
+    $("#confirm_pwd").keypress(function(e)
+    {
+        var len=$("#confirm_pwd").val().length;
+        var pwd=$("#pwd").val();
+        var s = String.fromCharCode(e.which);
+        if($("#pwd").val().length==0)
+        {
+            document.getElementById("pwd").style.border="3px solid red";
+            document.getElementById("pwd").focus();
+            $("#lbltxt6").html("First fill the password field");
+            document.getElementById("lbltxt7").style.visibility="visible";
+        }
+        else
+        {
+            document.getElementById("pwd").style.border="1px solid black";
+            document.getElementById("lbltxt6").style.visibility="hidden";
+        }
+        if($("#pwd").val().length!=0 && pwd.substr(0,len+1)!=$("#confirm_pwd").val()+s)
+        {
+            document.getElementById("confirm_pwd").style.border="3px solid red";
+            document.getElementById("confirm_pwd").focus();
+            $("#lbltxt7").html("Password does not match");
+            document.getElementById("lbltxt7").style.visibility="visible";
+        }
+        else
+        {
+            
+            document.getElementById("confirm_pwd").style.border="1px solid black";
+            document.getElementById("lbltxt7").style.visibility="hidden";
+
+        }
+    });
+    function isInputNumber(evt)
+    {
+        var ch=String.fromCharCode(evt.which);
+        if(!(/[0-9]/.test(ch)))
+        {
+            evt.preventDefault();
+        }
+    }
+    function isAlphaNumeric(evt)
+    {
+        var ch=String.fromCharCode(evt.which);
+        if(!(/[0-9 A-Z a-z]/.test(ch)))
+        {
+            evt.preventDefault();
+        }
+    }
+    function checkform()
+    {
+        if(document.getElementById("s_name").style.borderColor == "red" || document.getElementById("s_name").value.length==0)
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        else if(document.getElementById("mob_no").style.borderColor == "red" || document.getElementById("mob_no").value.length==0)
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        else if(document.getElementById("email").style.borderColor == "red" ||  document.getElementById("email").value.length==0) 
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        else if(document.getElementById("tan").style.borderColor == "red" || document.getElementById("tan").value.length==0)
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        else if(document.getElementById("pwd").style.borderColor == "red" || document.getElementById("pwd").value.length==0)
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        else if(document.getElementById("confirm_pwd").style.borderColor == "red" || document.getElementById("confirm_pwd").value.length==0)
+        {
+            alert("Fill all mandatory fields");
+            return false;
+        }
+        return true;
+    }
+</script>
